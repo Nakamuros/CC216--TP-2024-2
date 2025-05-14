@@ -45,10 +45,59 @@ Cada fila del dataset representa una **reserva individual** e incluye tanto rese
 
 ## 📌 Conclusiones
 
-*(Por completar...)*
+Posterior a un analisis exhaustivo se puede deducir que:
+
+- El City Hotel presenta una mayor preferencia por parte de los clientes en comparación con el Resort Hotel.
+
+- Se observa una disminución progresiva en la demanda de reservas a partir del año 2016.
+
+- Existen claras temporadas de alta, media y baja demanda:
+
+     - **Alta demanda:** mayo, julio y agosto.
+
+     - **Demanda media:** marzo, abril, junio, septiembre y octubre.
+
+     - **Baja demanda:** enero, febrero, noviembre y diciembre.
+
+- Se registraron 9,232 reservas que incluyen niños y/o bebés, lo cual evidencia la importancia de considerar a las familias como un segmento relevante.
+
+- Solo 7,416 reservas requerían espacios de estacionamiento, lo que indica una baja necesidad general de este servicio.
+
+- Los meses con mayor cantidad de cancelaciones de reservas fueron abril, mayo, junio, julio, septiembre y octubre, cada uno con más de 4,000 cancelaciones.
+
+**Recomendaciones**
+
+- **Estrategia de precios y campañas:**
+
+Aplicar tarifas dinámicas que incrementen en temporada alta para maximizar ingresos.
+
+Implementar promociones específicas durante las temporadas bajas para fomentar las reservas.
+
+- **Gestión de cancelaciones:**
+
+Fortalecer las políticas de cancelación, especialmente en los meses de alta cancelación.
+
+Utilizar recordatorios automáticos y ofrecer beneficios por cumplimiento de reserva para reducir las anulaciones.
+
+- **Segmentación y marketing:**
+
+Desarrollar ofertas familiares y paquetes especiales para reservas con niños y/o bebés.
+
+Enfocar campañas de marketing digital principalmente en el City Hotel, dada su popularidad.
+
+- **Infraestructura:**
+
+No es necesario ampliar los espacios de estacionamiento en este momento, dado su bajo nivel de requerimiento.
+
+- **Seguimiento de tendencias:**
+
+Continuar con el monitoreo y análisis de datos anualmente para adaptar las decisiones comerciales y operativas a los cambios de comportamiento del cliente.
 
 ---
 
 ## 📄 Licencia
 
-*(Por completar...)*
+Este trabajo esta licenciado bajo el estandar CC BY 4.0
+
+> https://creativecommons.org/licenses/by/4.0/
+
