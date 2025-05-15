@@ -1,5 +1,5 @@
 df<- read.csv("data/hotel_bookings.csv")
-
+install.packages("ggplot2")
 install.packages("psych")
 library("psych")
 library("ggplot2")
@@ -259,9 +259,127 @@ resumen_parqueo <- data_hotel_limpia %>%
   group_by(market_segment, hotel) %>%
   summarise(total_parqueo = sum(required_car_parking_spaces)) %>%
   ungroup()
+library(dplyr)
+# Filtrar datos del año 2016
+data_2016 <- data_hotel_limpia %>%
+  filter(arrival_date_year == 2016)
+
+# Asegurar orden cronológico de los meses
+data_2016$arrival_date_month <- factor(data_2016$arrival_date_month,
+                                       levels = month.name)
+
+# Gráfico comparativo por hotel
+ggplot(data_2016, aes(x = arrival_date_month, fill = hotel)) + 
+  geom_bar(position = "dodge") + 
+  labs(title = "Comparación de reservas por mes entre hoteles (Año 2016)", 
+       x = "Mes", 
+       y = "Cantidad de reservas", 
+       fill = "Hotel") + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+data_2016 %>%
+  filter(hotel == "City Hotel") %>%
+  ggplot(aes(x = deposit_type, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones por tipo de depósito – City Hotel (2016)",
+       x = "Tipo de depósito", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "forestgreen", "1" = "firebrick"),
+                    labels = c("No", "Sí")) +
+  theme_minimal()
+
+data_2016 %>%
+  filter(hotel == "Resort Hotel") %>%
+  ggplot(aes(x = deposit_type, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones por tipo de depósito – Resort Hotel (2016)",
+       x = "Tipo de depósito", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "seagreen", "1" = "darkred"),
+                    labels = c("No", "Sí")) +
+  theme_minimal()
 
 
+data_2016 %>%
+  filter(hotel == "City Hotel") %>%
+  ggplot(aes(x = market_segment, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones por segmento – City Hotel (2016)",
+       x = "Segmento", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "skyblue", "1" = "orange")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+data_2016 %>%
+  filter(hotel == "Resort Hotel") %>%
+  ggplot(aes(x = market_segment, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones por segmento – Resort Hotel (2016)",
+       x = "Segmento", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "lightblue", "1" = "tomato")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+data_2016 <- data_2016 %>%
+  mutate(menores = ifelse(children + babies > 0, "Con niños/bebés", "Sin niños/bebés"))
+
+data_2016 %>%
+  filter(hotel == "City Hotel") %>%
+  ggplot(aes(x = menores, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones según presencia de niños – City Hotel (2016)",
+       x = "Tipo de reserva", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "lightgreen", "1" = "red")) +
+  theme_minimal()
+
+data_2016 %>%
+  filter(hotel == "Resort Hotel") %>%
+  ggplot(aes(x = menores, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones según presencia de niños – Resort Hotel (2016)",
+       x = "Tipo de reserva", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "darkolivegreen1", "1" = "indianred")) +
+  theme_minimal()
+install.packages("forcats")
+library(forcats)
+
+data_2016 %>%
+  filter(hotel == "City Hotel", is_canceled == 1) %>%
+  count(country) %>%
+  top_n(10, n) %>%
+  ggplot(aes(x = fct_reorder(country, n), y = n)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Top 10 países con más cancelaciones – City Hotel (2016)",
+       x = "País", y = "Cancelaciones") +
+  coord_flip() +
+  theme_minimal()
+
+data_2016 %>%
+  filter(hotel == "Resort Hotel", is_canceled == 1) %>%
+  count(country) %>%
+  top_n(10, n) %>%
+  ggplot(aes(x = fct_reorder(country, n), y = n)) +
+  geom_bar(stat = "identity", fill = "darkorange") +
+  labs(title = "Top 10 países con más cancelaciones – Resort Hotel (2016)",
+       x = "País", y = "Cancelaciones") +
+  coord_flip() +
+  theme_minimal()
+
+data_2016 %>%
+  filter(hotel == "City Hotel") %>%
+  ggplot(aes(x = customer_type, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones por tipo de cliente – City Hotel (2016)",
+       x = "Tipo de cliente", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "cornflowerblue", "1" = "firebrick")) +
+  theme_minimal()
+
+data_2016 %>%
+  filter(hotel == "Resort Hotel") %>%
+  ggplot(aes(x = customer_type, fill = as.factor(is_canceled))) +
+  geom_bar(position = "fill") +
+  labs(title = "Cancelaciones por tipo de cliente – Resort Hotel (2016)",
+       x = "Tipo de cliente", y = "Proporción", fill = "¿Cancelado?") +
+  scale_fill_manual(values = c("0" = "skyblue3", "1" = "tomato3")) +
+  theme_minimal()
 
 
 
