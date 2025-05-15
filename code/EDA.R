@@ -381,9 +381,105 @@ data_2016 %>%
   scale_fill_manual(values = c("0" = "skyblue3", "1" = "tomato3")) +
   theme_minimal()
 
+# Filtrar solo cancelaciones del año 2016
+cancelaciones_2016 <- subset(data_hotel_limpia, 
+                             is_canceled == 1 & 
+                               arrival_date_year == 2016)
+
+# Crear el gráfico de barras agrupadas
+ggplot(cancelaciones_2016, aes(x = arrival_date_month, fill = hotel)) +
+  geom_bar(position = "dodge") +
+  scale_fill_manual(values = c("City Hotel" = "#1f77b4", "Resort Hotel" = "#ff7f0e")) +
+  labs(title = "Cancelaciones por mes en 2016: City Hotel vs Resort Hotel",
+       x = "Mes",
+       y = "Número de cancelaciones",
+       fill = "Tipo de hotel") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5)) +
+  scale_x_discrete(limits = month.name)  # Ordenar los meses correctamente
 
 
 
+
+# Filtrar datos y preparar meses
+cancelaciones_2016 <- subset(data_hotel_limpia, 
+                             is_canceled == 1 & 
+                               arrival_date_year == 2016)
+
+cancelaciones_2016$arrival_date_month <- factor(cancelaciones_2016$arrival_date_month, 
+                                                levels = month.name)
+
+# Gráfico de Cancelaciones Estándar vs No-Show
+ggplot(cancelaciones_2016, aes(x = arrival_date_month, fill = reservation_status)) +
+  geom_bar(position = "dodge") +
+  facet_wrap(~hotel, ncol = 1) +
+  scale_fill_manual(values = c("Canceled" = "#1f77b4", "No-Show" = "#d62728")) +
+  labs(title = "Cancelaciones Estándar vs No-Show en 2016",
+       subtitle = "Comparación entre City Hotel y Resort Hotel",
+       x = "Mes",
+       y = "Número de cancelaciones",
+       fill = "Tipo de cancelación") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5),
+        strip.text = element_text(face = "bold")) +
+  scale_x_discrete(limits = month.name)
+
+
+
+
+
+
+
+# Gráfico de Cancelaciones por Tipo de Depósito
+ggplot(cancelaciones_2016, aes(x = arrival_date_month, fill = deposit_type)) +
+  geom_bar(position = "fill") +
+  facet_wrap(~hotel, ncol = 1) +
+  scale_fill_manual(values = c("No Deposit" = "#2ca02c", 
+                               "Non Refund" = "#ff7f0e", 
+                               "Refundable" = "#9467bd")) +
+  labs(title = "Distribución de Cancelaciones por Tipo de Depósito (2016)",
+       subtitle = "Proporciones mensuales en cada tipo de hotel",
+       x = "Mes",
+       y = "Proporción de cancelaciones",
+       fill = "Tipo de depósito") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(hjust = 0.5, face = "bold"),
+        plot.subtitle = element_text(hjust = 0.5),
+        strip.text = element_text(face = "bold")) +
+  scale_x_discrete(limits = month.name) +
+  scale_y_continuous(labels = scales::percent)
+
+hotel_2016 <- data_hotel_limpia[data_hotel_limpia$arrival_date_year == 2016, ]
+
+# Ordenar meses como número
+month_order <- c("January", "February", "March", "April", "May", "June",
+                 "July", "August", "September", "October", "November", "December")
+hotel_2016$month_num <- match(hotel_2016$arrival_date_month, month_order)
+
+# Crear una columna de fecha
+hotel_2016$date <- as.Date(paste0(hotel_2016$arrival_date_year, "-", hotel_2016$month_num, "-01"))
+
+# Agrupar manualmente por hotel y fecha
+# Usaremos aggregate() para contar reservas
+reservas_por_hotel <- aggregate(
+  x = list(reservas = hotel_2016$hotel),
+  by = list(hotel = hotel_2016$hotel, date = hotel_2016$date),
+  FUN = length
+)
+
+# Crear gráfico de líneas superpuestas
+ggplot(reservas_por_hotel, aes(x = date, y = reservas, color = hotel, group = hotel)) +
+  geom_line(size = 1.2) +
+  geom_point(size = 2) +
+  labs(title = "Comparación de Demanda Mensual: City vs Resort Hotel (2016)",
+       x = "Mes", y = "Número de Reservas", color = "Hotel") +
+  scale_color_manual(values = c("City Hotel" = "blue", "Resort Hotel" = "green")) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
 
 
